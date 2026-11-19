@@ -308,6 +308,14 @@ ins{background:var(--good-bg);color:var(--good);text-decoration:none;border-radi
 footer{margin-top:70px;padding:34px 0 40px;border-top:1px solid var(--line2);color:var(--muted);font-size:13px}
 footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
 .hide{display:none!important}
+.chkgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chkgrid h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--brand2);margin:0 0 6px;display:flex;gap:6px;align-items:center}
+.chkgrid ul{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:13px;color:var(--ink2)}
+.chkgrid li{display:flex;gap:7px;align-items:flex-start}.chkgrid li .svgi{width:15px;height:15px;color:var(--good);margin-top:2px}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line2);font-size:13.5px}
+.chk:last-child{border-bottom:0}.chk .pill{min-width:58px;justify-content:center}
+.chk small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+@media (max-width:760px){.chkgrid{grid-template-columns:1fr}}
 .grid2>*,.tune>*,.kpis>*,.lists>*,.iv>*,.rep-top>*,.hero .wrap>*,.fields>*{min-width:0}
 .tabs{flex-wrap:wrap;max-width:100%}
 .pv-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
@@ -480,7 +488,7 @@ footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
 <main class="wrap">
   <section class="block" id="workspace">
     <div class="sec-h"><div><h2>Your resume <span class="serif">meets</span> the job</h2><p>Two inputs. Everything stays on your device unless you connect an AI provider.</p></div>
-      <div class="dl"><button class="btn ghost sm" id="sampleBtn" type="button"><svg class="svgi"><use href="#i-play"/></svg>Try with sample data</button></div></div>
+      <div class="dl" style="align-items:center"><div class="tabs" id="modeTabs" role="tablist" style="margin:0"><button type="button" class="on" data-mode="tailor" role="tab">Tailor to a job</button><button type="button" data-mode="improve" role="tab">Improve my resume</button></div><button class="btn ghost sm" id="sampleBtn" type="button"><svg class="svgi"><use href="#i-play"/></svg>Try with sample data</button></div></div>
     <div class="grid2">
       <article class="card" id="resumeCard">
         <div class="card-h"><span class="num">1</span><div><h3>Upload resume</h3><p>Word (.docx) recommended</p></div></div>
@@ -499,6 +507,11 @@ footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
         <div id="resumeInfo" class="hide"></div>
       </article>
 
+      <article class="card hide" id="improveCard">
+        <div class="card-h"><span class="num">2</span><div><h3>Resume health check</h3><p>No job description needed — we check, fix and re-score your resume</p></div></div>
+        <div id="chkInfo" class="chkgrid"></div>
+        <div class="note" style="margin-top:14px"><svg class="svgi"><use href="#i-info"/></svg><div>Your facts stay as they are — names, companies, dates, numbers and job titles. We fix wording, tense, verbs, punctuation, skill names and missing skills that your bullets already prove. Things only you can add (like metrics) are listed as suggestions.</div></div>
+      </article>
       <article class="card" id="job">
         <div class="card-h"><span class="num">2</span><div><h3>Job description</h3><p>Paste text or drop screenshots from any job portal</p></div></div>
         <div class="tabs" role="tablist">
@@ -545,18 +558,18 @@ footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
           <div class="card-h"><span class="num">3</span><div><h3>Fine-tune the rewrite</h3><p>Facts stay locked. Wording, emphasis and keywords change.</p></div></div>
           <label class="f">Tone</label>
           <div class="seg" id="toneSeg"><button type="button" class="on">Professional</button><button type="button">Impact-driven</button><button type="button">Concise</button><button type="button">Warm &amp; confident</button></div>
-          <div style="margin-top:16px"><label class="f" for="intensity">Rewrite depth</label><input type="range" id="intensity" min="1" max="3" step="1" value="3"><div class="rangelbl"><span>Light polish</span><span>Balanced</span><span>New resume from JD</span></div></div>
-          <div style="margin-top:16px">
+          <div style="margin-top:16px" id="depthBox"><label class="f" for="intensity">Rewrite depth</label><input type="range" id="intensity" min="1" max="3" step="1" value="3"><div class="rangelbl"><span>Light polish</span><span>Balanced</span><span>New resume from JD</span></div></div>
+          <div style="margin-top:16px" id="gapBox">
             <label class="f" id="gapTitle">Skills in the job that your resume doesn't mention</label>
             <p id="gapHelp" style="margin:0 0 8px;font-size:13px;color:var(--muted)">Tick only the ones you genuinely have — they'll be woven in. Unticked ones stay out (and become interview prep).</p>
             <div class="chips" id="gapChips"><span class="chip ghost">Upload a resume and add a job description first</span></div>
           </div>
-          <div class="lock"><svg class="svgi"><use href="#i-lock"/></svg>Locked: your name, contact details, job titles, company names, locations, dates, degrees and certifications — your real history stays exactly as written. The main heading, summary, bullets and skills are rebuilt for the job.</div>
+          <div class="lock" id="lockNote"><svg class="svgi"><use href="#i-lock"/></svg>Locked: your name, contact details, job titles, company names, locations, dates, degrees and certifications — your real history stays exactly as written. The main heading, summary, bullets and skills are rebuilt for the job.</div>
         </div>
         <div class="gen">
-          <h3>Generate tailored resume</h3>
+          <h3 id="genTitle">Generate tailored resume</h3>
           <p id="genHint">Engine: Offline engine — light rephrasing. Connect a free AI for full rewriting.</p>
-          <button class="btn primary xl" id="generateBtn" type="button"><svg class="svgi"><use href="#i-wand"/></svg>Generate Resume</button>
+          <button class="btn primary xl" id="generateBtn" type="button"><svg class="svgi"><use href="#i-wand"/></svg><span id="genLabel">Generate Resume</span></button>
           <ol class="prog" id="prog">
             <li><span class="st"></span>Reading your layout</li>
             <li><span class="st"></span>Matching job keywords</li>
@@ -570,23 +583,23 @@ footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
   </section>
 
   <section class="block hide" id="results">
-    <div class="sec-h"><div><h2>Your tailored resume</h2><p id="resSub">Same design, rewritten for the role.</p></div></div>
+    <div class="sec-h"><div><h2 id="resTitle">Your tailored resume</h2><p id="resSub">Same design, rewritten for the role.</p></div></div>
     <div class="note warn hide" id="truthNote" style="margin:0 0 16px"><svg class="svgi"><use href="#i-alert"/></svg><div>This version is written from the job description. Read every line and edit or remove anything you haven't actually done before you apply — the interviewer will ask about it.</div></div>
     <div class="kpis">
       <div class="card kpi"><span class="lbl"><svg class="svgi"><use href="#i-target"/></svg>ATS match · before → after</span><div class="gauges" id="gauges"></div></div>
-      <div class="card kpi"><span class="lbl">Job keywords covered</span><span class="val" id="kpiKw">0</span><span class="sub" id="kpiKwSub"></span></div>
-      <div class="card kpi"><span class="lbl">Paragraphs rewritten</span><span class="val" id="kpiPara">0</span><span class="sub" id="kpiParaSub"></span></div>
+      <div class="card kpi"><span class="lbl" id="kpiKwLbl">Job keywords covered</span><span class="val" id="kpiKw">0</span><span class="sub" id="kpiKwSub"></span></div>
+      <div class="card kpi"><span class="lbl" id="kpiParaLbl">Paragraphs rewritten</span><span class="val" id="kpiPara">0</span><span class="sub" id="kpiParaSub"></span></div>
       <div class="card kpi"><span class="lbl">Design preserved</span><span class="val" id="kpiFid" style="font-size:24px">Exact</span><span class="sub" id="kpiFidSub"></span></div>
     </div>
     <div class="grid2" style="margin-top:20px">
       <div class="card">
-        <div class="card-h"><div><h3>Keyword coverage by skill area</h3><p>Share of the job's keywords your resume covers</p></div></div>
-        <div class="legend" id="covLegend"><span><i style="background:var(--c-before)"></i>Original</span><span><i style="background:var(--c-after)"></i>Tailored</span></div>
+        <div class="card-h"><div><h3 id="covTitle">Keyword coverage by skill area</h3><p id="covSub">Share of the job's keywords your resume covers</p></div></div>
+        <div class="legend" id="covLegend"><span><i style="background:var(--c-before)"></i>Original</span><span><i style="background:var(--c-after)"></i><span id="legAfter">Tailored</span></span></div>
         <div class="chartbox" id="covBox"><canvas id="covChart" aria-label="Keyword coverage by skill area, original versus tailored"></canvas></div>
         <details style="margin-top:8px;font-size:13px"><summary style="cursor:pointer;color:var(--brand);font-weight:600">View as table</summary><div id="covTable"></div></details>
       </div>
       <div class="card" id="kwCard">
-        <div class="card-h"><div><h3>Keyword map</h3><p>What the recruiter's ATS will find</p></div></div>
+        <div class="card-h"><div><h3 id="kwTitle">Keyword map</h3><p id="kwSub">What the recruiter's ATS will find</p></div></div>
         <div id="kwGroups"></div>
       </div>
     </div>
@@ -603,7 +616,7 @@ footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
   </section>
 
   <section class="block" id="prep">
-    <div class="sec-h"><div><h2>Top 10 interview questions</h2><p>Predicted from the job description, answered with your own experience.</p></div>
+    <div class="sec-h"><div><h2>Top 10 interview questions</h2><p id="qaSub">Predicted from the job description, answered with your own experience.</p></div>
       <div class="dl"><button class="btn soft sm" id="qaBtn" type="button"><svg class="svgi"><use href="#i-spark"/></svg>Generate Q&amp;A</button><button class="btn ghost sm hide" id="qaExport" type="button"><svg class="svgi"><use href="#i-download"/></svg>Export</button></div></div>
     <div class="qa-cats" id="qaCats"></div>
     <div class="qlist" id="qaList"><div class="card empty"><svg class="svgi"><use href="#i-chat"/></svg><b>No questions yet</b><span>Add a job description, then press "Generate Q&amp;A" — or generate your resume and they'll appear automatically.</span></div></div>
@@ -1036,7 +1049,7 @@ const matchCase=(src,rep)=>src[0]===src[0].toUpperCase()&&src[0]!==src[0].toLowe
 function strengthenOpener(t,idx){let m;
   if((m=t.match(/^(?:was |were )?(?:responsible for|in charge of|tasked with|involved in|duties included|worked on|working on|helped (?:in |with )?|assisted (?:in |with )?)\s*(\w+ing)\b/i))){const v=gerundToPast(m[1]);if(v)return cap(v)+t.slice(m[0].length)}
   if((m=t.match(/^(?:was |were )?(?:responsible for|in charge of)\s+/i)))return 'Owned '+t.slice(m[0].length);
-  if((m=t.match(/^(?:worked on|involved in|working on)\s+/i)))return(idx%2?'Contributed to ':'Delivered work on ')+t.slice(m[0].length);
+  if((m=t.match(/^(?:worked on|involved in|working on)\s+/i)))return 'Contributed to '+t.slice(m[0].length);
   return t}
 const NO_ALIGN=new Set(['dashboards','operations','presentations','analytical','analytical thinking','Recruiting','stakeholder communication','regression suites','regression suite','test case','source control','bug tracking','defect management','Customer Support','Node','Vue','Mongo','UX','AI','ML','QA']);
 function alignTerms(s){const base=x=>x.toLowerCase().replace(/s$/,'');for(const term of S.jd.skills){const target=S.jd.form[term]||term;for(const{f,rx}of termRxs(term)){if(f===target||base(f)===base(target)||NO_ALIGN.has(f)||NO_ALIGN.has(target))continue;rx.lastIndex=0;s=s.replace(rx,m=>m===target?m:target)}}return s}
@@ -1096,7 +1109,7 @@ function offlineRewriteAll(targets,ctx){
   return out}
 
 /* ========== new resume from the JD (depth 3) ========== */
-const BASEVERB=new Set('lead manage define develop design drive own plan coordinate establish implement ensure build create review monitor mentor coach track report prepare execute perform conduct collaborate work partner support maintain improve optimize optimise automate analyze analyse identify deliver oversee set run write test validate verify communicate present facilitate estimate schedule prioritize prioritise recruit hire train onboard guide champion advocate influence negotiate handle resolve troubleshoot investigate document configure deploy integrate migrate evaluate assess measure scale architect research sell generate close achieve increase reduce grow launch ship operate administer audit enforce govern align translate contribute participate assist help provide serve liaise engage organize organise streamline standardize standardise introduce collect gather model forecast budget source upskill supervise direct head spearhead promote foster cultivate update upgrade secure protect sustain triage inspect approve raise define capture review remove eliminate unblock enable empower host refine groom embed nurture shield safeguard uphold mitigate escalate prepare consolidate showcase demonstrate partner'.split(' '));
+const BASEVERB=new Set('lead manage define develop design drive own plan coordinate establish implement ensure build create review monitor mentor coach track report prepare execute perform conduct collaborate work partner support maintain improve optimize optimise automate analyze analyse identify deliver oversee set run write test validate verify communicate present facilitate estimate schedule prioritize prioritise recruit hire train onboard guide champion advocate influence negotiate handle resolve troubleshoot investigate document configure deploy integrate migrate evaluate assess measure scale architect research sell generate close achieve increase reduce grow launch ship operate administer audit enforce govern align translate contribute participate assist help provide serve liaise engage organize organise streamline standardize standardise introduce collect gather model forecast budget source upskill supervise direct head spearhead promote foster cultivate update upgrade secure protect sustain triage inspect approve raise define capture review remove eliminate unblock enable empower host refine groom embed nurture shield safeguard uphold mitigate escalate prepare consolidate showcase demonstrate partner adopt learn move transition switch meet hit win expand modernize modernise refactor'.split(' '));
 const ADJ_GUARD=new Set(['proven','strong','excellent','good','solid','deep','working','sound','great','effective','outstanding','prior','relevant','demonstrated','previous','minimum','familiar','open','fast','agile','technical','hands-on','cross-functional','basic','advanced','high','key','end-to-end','new','senior','junior','bachelor','master']);
 const looksVerb=w=>w.length>=3&&!ADJ_GUARD.has(w)&&!/(tion|sion|ment|ness|ity|ance|ence|ship|ism|ist|al|ous|ive|ic|ful|ed|ly|er|or|s|ing|able|ible|ary|ory)$/.test(w);
 const IRREG_BASE={lead:'led',drive:'drove',build:'built',write:'wrote',run:'ran',set:'set',make:'made',take:'took',hold:'held',oversee:'oversaw',keep:'kept',give:'gave',bring:'brought',teach:'taught',sell:'sold',meet:'met',find:'found',spend:'spent',have:'had',do:'did',get:'got',put:'put',cut:'cut',grow:'grew',understand:'understood',think:'thought',choose:'chose',begin:'began',send:'sent',undertake:'undertook'};
@@ -1203,6 +1216,136 @@ function fullRewriteAll(targets,ctx){
       if(soft.length)s+=` Known for strong ${listJoin(soft)}${ctx.jd.company?`, ready to make an impact at ${ctx.jd.company}`:''}.`;else if(ctx.jd.company)s+=` Ready to make an impact at ${ctx.jd.company}.`;out.set(b.id,[fixEnd(s,o)])}}
   fullSkills(targets.filter(b=>b.role==='skills'),ctx,out);
   return out}
+
+/* ========== improve mode (no JD) ========== */
+const CHECKS=[['Structure','sections','Core sections present','Summary, Experience, Skills and Education'],['Structure','contact','Complete contact details','Email, phone and LinkedIn'],['Structure','summary','Focused summary','35–110 words'],
+  ['Impact','action','Bullets start with action verbs','Led, Built, Delivered…'],['Impact','weak','No weak openers','"Responsible for", "Worked on", "Helped"'],['Impact','tense','Consistent tense','Past tense for previous roles'],['Impact','quant','Quantified results','Numbers in half the bullets'],
+  ['Language','pronoun','No first-person pronouns','I, my, we…'],['Language','filler','No clichés or filler','"team player", "in order to"…'],['Language','punct','Consistent punctuation & spacing','Same ending style everywhere'],['Language','repeat','Varied action verbs','No opener used 3+ times'],['Language','length','Readable bullet length','8–38 words each'],
+  ['Skills','skills','Strong skills section','8+ recognised skills'],['Skills','evidence','Skills you use are listed','Tools in your bullets appear in Skills'],['Skills','casing','Correct tool names','JavaScript, JIRA, AWS…']];
+const AREA_W={Structure:20,Impact:35,Language:25,Skills:20};
+const WEAK_RX=/^(responsible for|was responsible|were responsible|in charge of|worked on|working on|involved in|helped|assisted|duties included|tasked with|participated in)\b/i;
+const PRONOUN_RX=/\b(I|me|my|mine|we|our)\b/;
+const FILLER_RX=/\b(in order to|a lot of|made sure|make sure|team player|hard[- ]working|go[- ]getter|think outside the box|synergy|very|really|extremely|various|utiliz(e|ed|ing))\b/i;
+const IMP_PH=[[/\bin order to\b/gi,'to'],[/\ba lot of\b/gi,'numerous'],[/\bmade sure\b/gi,'ensured'],[/\bmake sure\b/gi,'ensure'],[/\bteam player\b/gi,'collaborative teammate'],[/\bhard[- ]working\b/gi,'diligent'],[/\bgo[- ]getter\b/gi,'proactive professional'],[/\bthink outside the box\b/gi,'solve problems creatively'],[/\bsynergy\b/gi,'collaboration'],[/\b(very|really|extremely)\s+/gi,''],[/\bvarious\b/gi,'multiple'],[/\butilized\b/gi,'used'],[/\butilizing\b/gi,'using'],[/\butilize\b/gi,'use']];
+const CANON=SKILL_LIST.map(x=>x.term).filter(t=>!CASE.has(t)&&!['SAFe','Dart','Sass'].includes(t)&&(!/\s/.test(t)||/^(Power BI|MS Office|SQL Server|REST API|GitHub Actions|GitLab CI)$/.test(t))&&(t!==cap(t.toLowerCase())||/[#+./]/.test(t)))
+  .map(t=>({t,rx:new RegExp('(?<![\\w+#.])'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')+'(?![\\w+#]|\\.[A-Za-z])','gi')}));
+function canonFix(s){for(const{t,rx}of CANON){rx.lastIndex=0;s=s.replace(rx,m=>m===t?m:t)}return s}
+function canonIssues(s){let n=0;for(const{t,rx}of CANON){rx.lastIndex=0;let m;while((m=rx.exec(s)))if(m[0]!==t)n++}return n}
+const tidy=s=>s.replace(/[  ]{2,}/g,' ').replace(/\s+([,.;:!?])(?=\s|$)/g,'$1').replace(/\(\s+/g,'(').replace(/\s+\)/g,')').trim();
+function fixPhrases(s){for(const[rx,r]of IMP_PH){rx.lastIndex=0;s=s.replace(rx,m=>matchCase(m,r))}return s}
+function resumeSkills(text){const f=[];for(const s of SKILL_LIST){const c=countTerm(text,s.term);if(c.n)f.push({term:s.term,n:c.n,first:c.first})}
+  const sub=(a,b)=>a!==b&&new RegExp('(?<![\\w])'+a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\w])','i').test(b);
+  return f.filter(x=>!f.some(y=>sub(x.term,y.term)&&x.n<=y.n)).sort((a,b)=>b.n-a.n||a.first-b.first).slice(0,24).map(x=>x.term)}
+const EVID=k=>{const c=CAT_OF[k];if(!c||['Soft skills','Domain & Functions','Other'].includes(c))return false;if(c==='Testing & QA')return !/testing|^test |quality|uat|bdd|tdd|sdet|istqb|test cases|test plan|defect|smoke/i.test(k);if(c==='Methods & Process')return /^(JIRA|Confluence)$/.test(k);return true};
+const isBul=b=>b.role==='bullet'||(b.role==='para'&&['experience','projects'].includes(b.section));
+function isPastRole(b){const m=metaOf(b);return !!m&&/\b(19|20)\d{2}\b/.test(m)&&!/present|current|till date|to date|now/i.test(m)}
+const isActionStart=t=>{const w=(t.split(/\s+/)[0]||'').toLowerCase().replace(/[^a-z-]/g,'');return(/ed$/.test(w)&&w.length>4)||Object.values(IRREG).includes(w)||Object.values(IRREG_BASE).includes(w)||BASEVERB.has(w)||!!VERBS[w]||/^(spearheaded|shipped|set|cut|grew|won|ran|led|built|wrote|drove|owned)$/.test(w)};
+function profileCtx(){const d=S.doc,text=docText(d);const name=(d.blocks.find(b=>b.role==='name')||{}).text||S.headerName||'';const headline=(d.blocks.find(b=>b.role==='headline')||{}).text||'';
+  const recent=d.blocks.find(b=>b.jobLine);const rt=recent?findTitle(recent.segTexts.join('  '))||'':'';
+  let role=(headline.split(/\s*[|•·,]\s*/)[0]||'').trim();if(!role||words(role)>6||CONTACT_RX.test(role)||(!TITLE_RX.test(role)&&rt))role=rt||role||'professional';if(role===role.toUpperCase())role=titleWords(role.toLowerCase());
+  const skills=resumeSkills(text);return{jd:{text:'',title:rt||role,company:'',skills,form:{}},text,name,headline,matched:skills,gaps:[],confirmed:[],years:yearsExp(text,d),role,noJD:true}}
+function health(textOf){const d=S.doc,bl=d.blocks;const all=bl.map(textOf).join('\n')+'\n'+(d.extra||'');
+  const B=bl.filter(isBul).map(b=>({b,t:textOf(b).replace(BULLET_RX,'').trim()})).filter(x=>x.t);const n=Math.max(1,B.length),pct=k=>Math.round(100*k/n);
+  const act=B.filter(x=>isActionStart(x.t)).length,weak=B.filter(x=>WEAK_RX.test(x.t)).length,quant=B.filter(x=>/\d/.test(x.t)).length,lenOk=B.filter(x=>{const w=words(x.t);return w>=8&&w<=38}).length;
+  const tense=B.filter(x=>isPastRole(x.b)&&BASEVERB.has((x.t.split(/\s+/)[0]||'').toLowerCase())&&!/ed$/i.test(x.t.split(/\s+/)[0])).length;
+  const prose=bl.filter(b=>isBul(b)||(b.role==='para')).map(textOf);const pron=prose.filter(t=>PRONOUN_RX.test(t)).length,fill=prose.filter(t=>FILLER_RX.test(t)).length;
+  const ends=B.map(x=>/[.]$/.test(x.t)),endCons=ends.length?Math.max(ends.filter(Boolean).length,ends.filter(x=>!x).length)/ends.length:1;
+  const spacing=bl.filter(b=>['bullet','para','skills','headline'].includes(b.role)&&/\S[  ]{2,}\S|\s[,.;:!?](\s|$)/.test(b.segTexts.length?textOf(b):''));
+  const vc={};B.forEach(x=>{const v=(x.t.split(/\s+/)[0]||'').toLowerCase();if(isActionStart(x.t))vc[v]=(vc[v]||0)+1});const rep=Object.entries(vc).filter(([,c])=>c>=3).map(([v])=>v);
+  const secs=['summary','experience','skills','education'].filter(s=>bl.some(b=>b.section===s&&b.role!=='empty'&&b.role!=='heading'));
+  const ct={email:/@[\w-]+\.\w/.test(all),phone:/\+?\d[\d\s().-]{8,}\d/.test(all),linkedin:/linkedin/i.test(all)};const ctn=Object.values(ct).filter(Boolean).length;
+  const sum=bl.find(b=>b.role==='para'&&(b.section==='summary'||b.section==='header'));const sw=sum?words(textOf(sum)):0;
+  const skTxt=bl.filter(b=>b.role==='skills').map(textOf).join(' , ');const sk=resumeSkills(skTxt);
+  const ev=resumeSkills(B.map(x=>x.t).join(' ')).filter(k=>!matchTerm(skTxt,k)&&EVID(k));const cn=canonIssues(all);
+  const g=(c,a,b)=>c?2:a?1:0;
+  const res={sections:[g(secs.length===4,secs.length>=3),`${secs.length}/4 found${secs.length<4?' — missing: '+['summary','experience','skills','education'].filter(s=>!secs.includes(s)).join(', '):''}`],
+    contact:[g(ctn===3,ctn===2),`${['email','phone','linkedin'].filter(k=>ct[k]).join(', ')||'none'} found${ctn<3?' — add '+['email','phone','linkedin'].filter(k=>!ct[k]).join(', '):''}`],
+    summary:[g(sw>=35&&sw<=110,sw>=20&&sw<=150),sum?`${sw} words`:'No summary paragraph found'],
+    action:[g(act/n>=0.9,act/n>=0.7),`${pct(act)}% of ${B.length} bullets`],weak:[g(weak===0,weak<=2),weak?`${weak} bullet${weak>1?'s':''} start weakly`:'None'],
+    tense:[g(tense===0,tense<=2),tense?`${tense} past-role bullet${tense>1?'s':''} in present tense`:'Consistent'],quant:[g(quant/n>=0.5,quant/n>=0.3),`${pct(quant)}% have a number — add metrics where you can`],
+    pronoun:[g(pron===0,pron<=1),pron?`${pron} paragraph${pron>1?'s':''} use I/my/we`:'None'],filler:[g(fill===0,fill<=2),fill?`${fill} paragraph${fill>1?'s':''} with filler phrases`:'None'],
+    punct:[g(endCons===1&&!spacing.length,endCons>=0.8&&spacing.length<=2),`${Math.round(endCons*100)}% consistent endings${spacing.length?`, ${spacing.length} spacing issue${spacing.length>1?'s':''}`:''}`],
+    repeat:[g(!rep.length,rep.length<=1),rep.length?`Overused: ${rep.join(', ')}`:'Good variety'],length:[g(lenOk/n>=0.85,lenOk/n>=0.65),`${pct(lenOk)}% within 8–38 words`],
+    skills:[g(sk.length>=8,sk.length>=5),`${sk.length} recognised skills`],evidence:[g(!ev.length,ev.length<=2),ev.length?`Used but not listed: ${ev.slice(0,6).join(', ')}`:'All listed'],casing:[g(cn===0,cn<=2),cn?`${cn} tool name${cn>1?'s':''} with wrong casing`:'All correct']};
+  const areas={};for(const[a,id]of CHECKS){areas[a]=areas[a]||{s:0,n:0};areas[a].s+=res[id][0];areas[a].n+=2}
+  const score=Math.round(Object.entries(areas).reduce((s,[a,v])=>s+AREA_W[a]*v.s/v.n,0));
+  return{score,res,areas:Object.fromEntries(Object.entries(areas).map(([a,v])=>[a,Math.round(100*v.s/v.n)]))}}
+function skillsFix(t){const m=t.match(/^([^:]{1,40}:\s*)(.*)$/);const label=m?m[1]:'',body=m?m[2]:t;const seps=new Set((body.match(/[,|•;·]/g)||[]));if(seps.size!==1)return canonFix(t);
+  const sc=[...seps][0],sep=sc===','?', ':sc===';'?'; ':` ${sc} `,end=/\.$/.test(body.trim())?'.':'';const seen=new Set();
+  const items=body.replace(/\.$/,'').split(/\s*[,|•;·]\s*/).map(x=>canonFix(x.trim())).filter(x=>{const k=x.toLowerCase();if(!x||seen.has(k))return false;seen.add(k);return true});
+  return label+items.join(sep)+end}
+function improveAll(targets){const out=new Map();const bt=targets.filter(isBul);const ends=bt.map(b=>/[.]$/.test(origOf(b)));const usePeriod=ends.filter(Boolean).length>=ends.length/2;const vc={};
+  for(const b of targets){if(b.jobLine)continue;
+    const parts=b.segTexts.map((s,k)=>{if(b.nseg>1&&k===0&&(/:\s*$/.test(s)||words(s)<=3))return s.trim();let t=tidy(s);if(!t)return s;
+      if(b.role==='skills')return skillsFix(t);
+      t=canonFix(fixPhrases(t));
+      if(isBul(b)){t=cap(t.replace(/^(I|We)\s+/,''));t=strengthenOpener(t,0);
+        t=t.replace(/^Helped ((?:the |our |a )?[\w-]+(?: [\w-]+)?) ([a-z]+)\b/,(m0,o,v)=>BASEVERB.has(v)?`Enabled ${o} to ${v}`:m0).replace(/^Helped (?:to )?([a-z]+)\b/,(m0,v)=>BASEVERB.has(v)?`Contributed to ${baseToGerund(v)}`:m0);
+        const w0=t.split(/\s+/)[0],wl=w0.toLowerCase().replace(/[^a-z]/g,'');if(isPastRole(b)&&BASEVERB.has(wl))t=cap(baseToPast(wl))+t.slice(w0.length);
+        const v=t.split(/\s+/)[0].toLowerCase();vc[v]=(vc[v]||0)+1;if(vc[v]>=3&&VERBS[v]){const o=VERBS[v];t=cap(o[vc[v]%o.length])+t.slice(t.split(/\s+/)[0].length)}
+        t=t.replace(/[.;,\s]+$/,'')+(usePeriod?'.':'')}
+      else if(b.role==='para')t=cap(t.replace(/^I am (a|an)\s+/i,'').replace(/^I have\s+/i,'Bringing '));
+      return t});out.set(b.id,parts)}
+  const sb=targets.filter(b=>b.role==='skills');
+  if(sb.length){const sec=sb.map(origOf).join(' , ');const miss=resumeSkills(S.doc.blocks.filter(isBul).map(origOf).join(' ')).filter(k=>!matchTerm(sec,k)&&EVID(k)).slice(0,8);const per=new Map();
+    for(const k of miss){let best=null,bs=-1e9;for(const b of sb){const p=out.get(b.id)||b.segTexts,s=p[p.length-1];if(!/[,|•;·]/.test(s)||(per.get(b.id)||0)>=3)continue;const lt=(b.nseg>1?b.segTexts[0]:(s.match(/^([^:]{1,40}):/)||['',''])[1]).toLowerCase();
+        const cats=new Set(s.split(/\s*[,|•;·]\s*/).map(i=>{const x=SKILL_LIST.find(x=>matchTerm(i,x.term));return x?x.cat:null}));const c=CAT_OF[k];
+        let sc=(cats.has(c)?3:0)+(CAT_LABEL[c]&&CAT_LABEL[c].test(lt)?3:0)+(SK_TOOL.test(k)&&/tool/.test(lt)?3:0)+(SK_AUTO.test(k)&&/automat|test/.test(lt)?3:0)+(/framework|librar/.test(lt)&&c==='Languages & Frameworks'?2:0)-(per.get(b.id)||0);if(sc>bs){bs=sc;best=b}}
+      if(!best||bs<=0)continue;per.set(best.id,(per.get(best.id)||0)+1);
+      if(!best)break;const p=[...(out.get(best.id)||best.segTexts)],i=p.length-1,s=p[i].replace(/\s+$/,'');const sc=(s.match(/[,|•;·]/)||[','])[0];const end=/\.$/.test(s)?'.':'';p[i]=s.replace(/\.$/,'')+(sc===','?', ':sc===';'?'; ':` ${sc} `)+k+end;out.set(best.id,p)}}
+  return out}
+const SYS_IMPROVE='You are an expert resume editor and ATS specialist. You polish resume text so it reads like a top-tier, ATS-friendly resume without changing any facts. Reply with valid JSON only.';
+function improvePrompt(batch,ctx,compact){return `CANDIDATE: ${ctx.name||'n/a'} · headline: ${ctx.headline||'n/a'} · experience: ${ctx.years?ctx.years+'+ years':'n/a'}
+STYLE: tone = ${S.tone}.
+
+IMPROVE EACH TEXT BELOW
+1. Every bullet starts with a strong, varied action verb — past tense for previous roles; present tense is fine for the current role (see "context").
+2. Remove weak openers (Responsible for, Worked on, Helped, Assisted), first-person pronouns, clichés and filler words.
+3. Make it concise and specific (12–30 words per bullet), fix grammar, spelling, punctuation and capitalisation; use official tool names (JavaScript, JIRA, AWS).
+4. Keep every fact, number, tool, product, company and job title exactly. Never invent metrics, skills or achievements.
+5. role=skills → keep the label and separators, fix names, remove duplicates; you may add tools that the bullets clearly show.
+6. Summary/profile paragraphs → 3–4 crisp sentences: who the candidate is, years of experience, core strengths and a standout result taken from the resume.
+7. Keep each text within ±20% of its length. Plain text only — no markdown, no bullet symbols. Markers like ⟦1⟧ ⟦2⟧ must be returned unchanged and in order. Same language as the original.
+${compact?'':`
+RESUME (for context):
+"""${ctx.text.slice(0,4500)}"""
+`}
+TEXTS TO IMPROVE:
+${JSON.stringify(batch.map(x=>({id:x.id,role:x.role,section:x.section,...(x.context?{context:x.context}:{}),text:x.text})))}
+
+Return JSON only, mapping every id to its improved text, e.g. {"p3":"...","p7":"..."}`}
+async function improve(){
+  if(!S.doc){toast('Upload your resume first.','warn');$('#workspace').scrollIntoView();return}
+  const btn=$('#generateBtn');btn.disabled=true;setProg(0);
+  try{const provider=await resolveProvider();await new Promise(r=>setTimeout(r,120));setProg(1);
+    const ctx=profileCtx();const before=health(origOf);
+    const targets=S.doc.blocks.filter(b=>b.rewrite&&!b.jobLine&&b.role!=='headline');
+    setProg(2,`Fixing ${targets.length} paragraphs · ${provLabel(provider)}`);
+    const off=improveAll(targets);let out=off,used=provider;
+    if(provider!=='offline'){let ai;try{ai=await llmRewrite(targets,ctx,provider,(i,n)=>setProg(2,`Improving with ${provLabel(provider)}${n>1?` · part ${i}/${n}`:''}`),{sys:SYS_IMPROVE,prompt:improvePrompt,mode:'improve'})}catch(e){if(e.message!=='cancelled')throw e;ai=new Map();used='offline'}
+      out=new Map();const bt=targets.filter(isBul);const usePeriod=bt.filter(b=>/[.]$/.test(origOf(b))).length>=bt.length/2;
+      for(const b of targets){let v=ai.get(b.id);if(v&&isBul(b))v=v.map((p,k)=>k===v.length-1?canonFix(tidy(p)).replace(/[.;,\s]+$/,'')+(usePeriod?'.':''):p);out.set(b.id,v||off.get(b.id))}
+      if(!ai.size)used='offline';S.aiCount=ai.size}else S.aiCount=0;
+    for(const[k,v]of[...out])if(v.map(x=>x.trim()).join('|')===S.doc.blocks.find(b=>b.id===k).segTexts.map(x=>x.trim()).join('|'))out.delete(k);
+    setProg(3);const R={out,provider:used,ctx,mode:'improve'};
+    if(S.doc.kind==='docx'||S.doc.kind==='odt')R.blob=await buildXmlDoc(S.doc,out);
+    setProg(4);const after=health(b=>out.has(b.id)?out.get(b.id).join(' '):origOf(b));
+    R.before=before.score;R.after=Math.max(before.score,after.score);R.hb=before;R.ha=after;
+    const o=docText(S.doc),nt=newText(R);R.lenDelta=Math.round(100*(nt.length-o.length)/Math.max(1,o.length));
+    S.result=R;await showResults();setProg(5);
+    toast(`Done — ${out.size} paragraphs improved, ATS score ${R.before} → ${R.after}.`,'good');
+    $('#results').scrollIntoView({behavior:'smooth'});genQA(false);
+  }catch(e){console.error(e);toast('Something went wrong: '+e.message,'bad',8000);setProg(-1)}
+  finally{btn.disabled=false}}
+const PROG_T=['Reading your layout','Matching job keywords','Rewriting paragraphs','Rebuilding your document','Scoring & interview prep'],PROG_I=['Reading your layout','Running 15 resume checks','Fixing wording & structure','Rebuilding your document','Re-scoring & interview prep'];
+function setMode(m){S.mode=m;const imp=m==='improve';$$('#modeTabs button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  $('#job').classList.toggle('hide',imp);$('#improveCard').classList.toggle('hide',!imp);['depthBox','gapBox'].forEach(id=>$('#'+id).classList.toggle('hide',imp));
+  $('#genTitle').textContent=imp?'Check & improve resume':'Generate tailored resume';$('#genLabel').textContent=imp?'Check & Improve Resume':'Generate Resume';
+  $('#lockNote').lastChild.textContent=imp?' Locked: your name, contact details, job titles, companies, dates, numbers, degrees and certifications. Only wording, tense, punctuation and skill names are fixed.':' Locked: your name, contact details, job titles, company names, locations, dates, degrees and certifications — your real history stays exactly as written. The main heading, summary, bullets and skills are rebuilt for the job.';
+  $$('#prog li').forEach((li,i)=>{li.className='';li.lastChild.textContent=(imp?PROG_I:PROG_T)[i]});
+  $('#qaSub').textContent=imp?'Predicted from your resume, answered with your own experience.':'Predicted from the job description, answered with your own experience.';
+  if(!$('#chkInfo').innerHTML){const g={};CHECKS.forEach(([a,,n,d])=>(g[a]=g[a]||[]).push([n,d]));$('#chkInfo').innerHTML=Object.entries(g).map(([a,l])=>`<div><h4>${a}</h4><ul>${l.map(([n,d])=>`<li>${icon('check')}<span><b style="font-weight:600;color:var(--ink)">${esc(n)}</b><br><small style="color:var(--muted)">${esc(d)}</small></span></li>`).join('')}</ul></div>`).join('')}
+  S.result=null;S.qa=[];$('#results').classList.add('hide');updateEngine()}
 
 /* ========== AI providers ========== */
 const PROV={
@@ -1350,13 +1493,13 @@ function buildCtx(){const d=S.doc,text=docText(d);readJD();
 function batches(items,budget){const out=[];let cur=[],n=0;for(const it of items){const l=it.text.length+70;if(cur.length&&n+l>budget){out.push(cur);cur=[];n=0}cur.push(it);n+=l}if(cur.length)out.push(cur);return out}
 function splitMarkers(s,n){s=String(s);if(n===1)return[s.replace(/⟦\d+⟧/g,'').trim()];const parts=s.split(/⟦(\d+)⟧/);const out=[];for(let i=1;i<parts.length;i+=2)out[+parts[i]-1]=parts[i+1]??'';if(out.length!==n||out.some(x=>x==null))return null;return out}
 const cleanLLM=v=>String(v).replace(/^\s*(?:[-*•●▪◦]\s+)/,'').replace(/\*\*|__|`/g,'').replace(/^["“](.*)["”]$/s,'$1').trim();
-async function llmRewrite(targets,ctx,provider,onStep){
+async function llmRewrite(targets,ctx,provider,onStep,opt={}){
   const budget=provider==='chrome'?1500:provider==='manual'?1e9:6500;
-  const full=S.intensity===3;
-  const bs=batches(targets.map(b=>({id:b.id,role:b.jobLine?'jobtitle':b.role,section:b.section,b,context:b.jobLine?'':full&&b.section==='experience'&&b.role!=='skills'?metaOf(b):'',text:b.nseg>1?b.segTexts.map((t,i)=>`⟦${i+1}⟧${t.trim()}`).join(' '):origOf(b)})),budget);
+  const full=!opt.mode&&S.intensity===3;
+  const bs=batches(targets.map(b=>({id:b.id,role:b.jobLine?'jobtitle':b.role,section:b.section,b,context:b.jobLine?'':(full||opt.mode)&&b.section==='experience'&&b.role!=='skills'?metaOf(b):'',text:b.nseg>1?b.segTexts.map((t,i)=>`⟦${i+1}⟧${t.trim()}`).join(' '):origOf(b)})),budget);
   const res=new Map();
   for(let i=0;i<bs.length;i++){onStep(i+1,bs.length);let txt;
-    try{txt=await callLLM(full?SYS_REWRITE_FULL:SYS_REWRITE,rewritePrompt(bs[i],ctx,provider==='chrome'),{provider,title:'Rewrite resume'+(bs.length>1?` (${i+1}/${bs.length})`:''),maxTokens:8000})}
+    try{txt=await callLLM(opt.sys||(full?SYS_REWRITE_FULL:SYS_REWRITE),(opt.prompt||rewritePrompt)(bs[i],ctx,provider==='chrome'),{provider,title:(opt.mode?'Improve resume':'Rewrite resume')+(bs.length>1?` (${i+1}/${bs.length})`:''),maxTokens:8000})}
     catch(e){if(e.message==='cancelled')throw e;toast(`${provLabel(provider)}: ${e.message} — using the offline engine for this part.`,'warn',7000);continue}
     let o=parseJSONLoose(txt)||{};if(Array.isArray(o)){const m={};o.forEach(x=>{if(x&&x.id)m[x.id]=x.text});o=m}else if(o.paragraphs||o.texts)o=o.paragraphs||o.texts;
     if(Array.isArray(o)){const m={};o.forEach(x=>{if(x&&x.id)m[x.id]=x.text});o=m}
@@ -1368,6 +1511,7 @@ async function llmRewrite(targets,ctx,provider,onStep){
   return res}
 function setProg(step,label){$$('#prog li').forEach((li,i)=>{li.classList.toggle('done',i<step);li.classList.toggle('active',i===step)});if(label!=null&&step<5)$$('#prog li')[step].lastChild.textContent=label}
 async function generate(){
+  if(S.mode==='improve')return improve();
   if(!S.doc){toast('Upload your resume first.','warn');$('#workspace').scrollIntoView();return}
   readJD();if(!S.jd.text.trim()&&!S.jd.skills.length){toast('Paste the job description (or add skills) first.','warn');$('#job').scrollIntoView();return}
   if(!S.jd.skills.length)analyzeJD(true);
@@ -1441,7 +1585,7 @@ async function showView(v){S.view=v;$$('#pvTabs button').forEach(b=>b.classList.
   if(v==='diff'){const R=S.result;const rows=S.doc.blocks.filter(b=>R.out.has(b.id));
     pv.innerHTML=rows.length?rows.map(b=>{const d=wordDiff(origOf(b),R.out.get(b.id).join(' '));return `<div class="diffcard"><div class="dh"><span class="role">${b.role}</span><small style="color:var(--muted)">${esc(b.section)}</small></div><div class="cols"><div><small>Before</small>${d.a}</div><div><small>After</small>${d.b}</div></div></div>`}).join(''):'<div class="empty">No changes.</div>';return}
   const box=el('div','pvbox');pv.append(box);await renderView(box,v)}
-function baseName(){const n=(S.file?.name||'resume').replace(/\.[^.]+$/,'');const c=(S.jd.company||S.jd.title||'tailored').replace(/[^\w]+/g,'_').replace(/^_|_$/g,'').slice(0,30);return `${n}_${c}`}
+function baseName(){const n=(S.file?.name||'resume').replace(/\.[^.]+$/,'');if(S.result&&S.result.mode==='improve')return `${n}_improved`;const c=(S.jd.company||S.jd.title||'tailored').replace(/[^\w]+/g,'_').replace(/^_|_$/g,'').slice(0,30);return `${n}_${c}`}
 function plainText(useNew){const R=S.result;let out=[];for(const b of S.doc.blocks){let t=useNew&&R.out.has(b.id)?R.out.get(b.id).join(' '):b.text;if(b.role==='empty'){out.push('');continue}
   const bul=b.role==='bullet'||(b.isList&&b.role!=='heading');if(bul)t=t.replace(BULLET_RX,'');const pre=b.prefix!=null?b.prefix:(bul?'• ':'');if(b.role==='heading'&&out.length&&out[out.length-1]!=='')out.push('');out.push(pre+t)}return out.join('\n').replace(/\n{3,}/g,'\n\n')}
 async function blocksToDocx(){const d=S.doc,R=S.result,isPdf=d.kind==='pdf',X=esc;
@@ -1496,11 +1640,23 @@ function drawCoverage(){const R=S.result;if(!R||!window.Chart)return;const C=cha
   S.charts.cov&&S.charts.cov.destroy();$('#covBox').style.height=Math.max(170,cats.length*58+40)+'px';
   const SHORT={'Languages & Frameworks':'Languages','Cloud & DevOps':'Cloud/DevOps','Methods & Process':'Methods','Business & Tools':'Business tools','Domain & Functions':'Domain'};const narrow=$('#covBox').clientWidth<460;
   S.charts.cov=new Chart($('#covChart'),{type:'bar',data:{labels:cats.map(([c])=>narrow&&SHORT[c]||c),datasets:[{label:'Original',data:cats.map(([,v])=>pct(v.b,v.t)),backgroundColor:C.before,borderRadius:4,borderSkipped:'start',barThickness:13},{label:'Tailored',data:cats.map(([,v])=>pct(v.a,v.t)),backgroundColor:C.after,borderRadius:4,borderSkipped:'start',barThickness:13}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:{duration:500},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const v=cats[c.dataIndex][1];return ` ${c.dataset.label}: ${c.raw}% (${c.datasetIndex?v.a:v.b} of ${v.t} keywords)`}}}},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:{duration:500},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const v=cats[c.dataIndex][1];return R.mode==='improve'?` ${c.dataset.label}: ${c.raw}/100`:` ${c.dataset.label}: ${c.raw}% (${c.datasetIndex?v.a:v.b} of ${v.t} keywords)`}}}},
       scales:{x:{min:0,max:100,ticks:{callback:v=>v+'%',color:C.muted},grid:{color:C.grid},border:{display:false}},y:{ticks:{color:C.ink,font:{weight:600}},grid:{display:false},border:{display:false}}}}});
   $('#covTable').innerHTML=`<table style="width:100%;border-collapse:collapse;margin-top:8px"><tr style="text-align:left;color:var(--muted)"><th>Area</th><th>Original</th><th>Tailored</th><th>Keywords</th></tr>${cats.map(([c,v])=>`<tr style="border-top:1px solid var(--line2)"><td>${c}</td><td>${pct(v.b,v.t)}%</td><td>${pct(v.a,v.t)}%</td><td>${v.t}</td></tr>`).join('')}</table>`}
-async function showResults(){const R=S.result,d=S.doc;$('#results').classList.remove('hide');
-  $('#gauges').innerHTML=gaugeSVG(R.before,'Original','var(--c-before)')+'<span class="gauge-arrow">→</span>'+gaugeSVG(R.after,'Tailored','var(--c-after)');
+async function showResults(){const R=S.result,d=S.doc;$('#results').classList.remove('hide');const imp=R.mode==='improve';$('#resTitle').textContent=imp?'Your improved resume':'Your tailored resume';
+  $('#gauges').innerHTML=gaugeSVG(R.before,'Original','var(--c-before)')+'<span class="gauge-arrow">→</span>'+gaugeSVG(R.after,imp?'Improved':'Tailored','var(--c-after)');
+  $('#kpiKwLbl').textContent=imp?'Checks passed':'Job keywords covered';$('#kpiParaLbl').textContent=imp?'Paragraphs improved':'Paragraphs rewritten';
+  $('#covTitle').textContent=imp?'Resume health by area':'Keyword coverage by skill area';$('#covSub').textContent=imp?'Structure, impact, language and skills — before and after':"Share of the job's keywords your resume covers";$('#legAfter').textContent=imp?'Improved':'Tailored';
+  $('#kwTitle').textContent=imp?'Resume checks':'Keyword map';$('#kwSub').textContent=imp?'15 checks recruiters and ATS systems care about':"What the recruiter's ATS will find";
+  if(imp){const ids=CHECKS.map(c=>c[1]);const pass=ids.filter(i=>R.ha.res[i][0]===2).length,was=ids.filter(i=>R.hb.res[i][0]===2).length;
+    $('#kpiKw').innerHTML=`${pass}<small> / ${ids.length}</small>`;$('#kpiKwSub').textContent=pass>was?`up from ${was} before fixes`:'see the checklist for what to add';
+    $('#kpiPara').textContent=R.out.size;$('#kpiParaSub').textContent=`${R.provider==='offline'?'Offline engine':provLabel(R.provider)} · length ${R.lenDelta>=0?'+':''}${R.lenDelta}%`;
+    const fid={exact:['Exact','Your own file, only the words changed'],high:['High','PDF layout overlay + editable Word copy'],structure:['Structure','Same sections & order — use .docx for exact design']}[d.fidelity];$('#kpiFid').textContent=fid[0];$('#kpiFidSub').textContent=fid[1];
+    $('#resSub').textContent=`Health check complete — ATS score ${R.before} → ${R.after}. Same design, cleaner wording.`;$('#truthNote').classList.add('hide');
+    const lbl=['Fix','Fair','Pass'],cls=['bad','warn','good'],ic=['x','alert','check'];
+    $('#kwGroups').innerHTML=CHECKS.map(([a,id,name])=>{const[s0,]=R.hb.res[id],[s1,det]=R.ha.res[id];return `<div class="chk"><span class="pill ${cls[s1]}">${icon(ic[s1],'width:13px;height:13px')}${lbl[s1]}</span><div><b>${esc(name)}</b><small>${esc(det)}${s1!==s0?` · was ${lbl[s0]}`:''}${s1<2&&['quant','contact','sections','length','summary','skills'].includes(id)?' · needs your input':''}</small></div></div>`}).join('');
+    R.cats=Object.fromEntries(Object.keys(R.ha.areas).map(a=>[a,{t:100,b:R.hb.areas[a],a:R.ha.areas[a]}]));
+    drawCoverage();renderDownloads();await showView('new');return}
   $('#kpiKw').innerHTML=`${R.kwAfter.length}<small> / ${S.jd.skills.length}</small>`;$('#kpiKwSub').textContent=R.added.length?`+${R.added.length} added by tailoring`:`${R.kwBefore.length} were already covered`;
   $('#kpiPara').textContent=R.out.size;$('#kpiParaSub').textContent=`${R.provider==='offline'?'Offline engine':provLabel(R.provider)} · length ${R.lenDelta>=0?'+':''}${R.lenDelta}%`;
   const fid={exact:['Exact','Your own file, only the words changed'],high:['High','PDF layout overlay + editable Word copy'],structure:['Structure','Same sections & order — use .docx for exact design']}[d.fidelity];
@@ -1519,7 +1675,7 @@ async function onResume(file){if(!file)return;if(file.size>15*1024*1024){toast('
   S.file=file;setResumeStatus('Reading layout…');
   try{const d=await parseResume(file);if(!d||!d.blocks.some(b=>b.text.trim()))throw new Error('No readable text found in this file.');
     S.doc=d;S.result=null;$('#results').classList.add('hide');renderResumeInfo();updateGaps();
-    toast(`Resume loaded — ${d.blocks.filter(b=>b.rewrite).length} paragraphs ready to tailor.`,'good')}
+    toast(`Resume loaded — ${d.blocks.filter(b=>b.rewrite).length} paragraphs ready to ${S.mode==='improve'?'check':'tailor'}.`,'good')}
   catch(e){console.error(e);S.doc=null;$('#resumeInfo').innerHTML=`<div class="note warn">${icon('alert')}<div><b>Couldn't read ${esc(file.name)}.</b> ${esc(e.message)}</div></div>`}}
 function renderResumeInfo(){const d=S.doc,box=$('#resumeInfo');box.classList.remove('hide');
   const ext=S.file.name.split('.').pop();const fid={exact:['good','Exact design'],high:['info','Layout overlay'],structure:['warn','Structure only']}[d.fidelity];
@@ -1554,13 +1710,13 @@ async function handleShots(files){files=files.filter(Boolean);if(!files.length)r
 function setJdTab(t){$$('[data-jdtab]').forEach(b=>b.classList.toggle('on',b.dataset.jdtab===t));$('#jdTextPane').classList.toggle('hide',t!=='text');$('#jdShotPane').classList.toggle('hide',t!=='shot')}
 
 /* ========== interview Q&A ========== */
-function ctxAny(){if(S.doc)return buildCtx();readJD();return{jd:{...S.jd},text:'',name:'',headline:'',matched:[],gaps:[...S.jd.skills],confirmed:[],years:0,role:S.jd.title||'professional'}}
+function ctxAny(){if(S.mode==='improve'&&S.doc)return profileCtx();if(S.doc)return buildCtx();readJD();return{jd:{...S.jd},text:'',name:'',headline:'',matched:[],gaps:[...S.jd.skills],confirmed:[],years:0,role:S.jd.title||'professional'}}
 const linkFor=k=>DOCS[k]?{title:`${S.jd.form[k]||k} — official docs`,url:DOCS[k]}:{title:`${S.jd.form[k]||k} interview topics`,url:'https://www.google.com/search?q='+encodeURIComponent((S.jd.form[k]||k)+' interview questions')};
 function firstPerson(t){t=t.trim().replace(/\.$/,'');const w=t.split(/\s+/)[0]||'';if(/ed$/i.test(w)||Object.values(IRREG).includes(w.toLowerCase())||/^(Led|Built|Wrote|Ran|Drove|Owned|Cut|Grew|Spearheaded|Shipped|Set)$/i.test(w))return 'I '+w.toLowerCase()+t.slice(w.length);return t[0].toLowerCase()+t.slice(1)}
 function offlineQA(ctx){const j=ctx.jd,comp=j.company||'your company',title=j.title||'this role';
   const bl=S.doc?S.doc.blocks:[];const outOf=b=>S.result&&S.result.out.has(b.id)?S.result.out.get(b.id).join(' '):origOf(b);
   const bullets=bl.filter(b=>b.role==='bullet').map(b=>({t:outOf(b),b}));
-  const coOf=b=>{let i=bl.indexOf(b);for(;i>=0;i--)if(bl[i].role==='meta'){const t=bl[i].segTexts.join('  ').replace(DATE_SPAN,' ').trim();const parts=t.split(/\s+(?:at|@|[|–—-])\s+|,\s+|\s{2,}/).map(s=>s.trim()).filter(s=>s&&!DATE_RX.test(s));return parts.length>1?parts[parts.length-1]:''}return ''};
+  const coOf=b=>{let i=bl.indexOf(b);for(let j=i;j>=0&&bl[j].role!=='heading';j--)if(bl[j].jobLine){const c=metaCompany(bl[j]);if(c)return c}for(;i>=0;i--)if(bl[i].role==='meta'){const t=bl[i].segTexts.join('  ').replace(DATE_SPAN,' ').trim();const parts=t.split(/\s+(?:at|@|[|–—-])\s+|,\s+|\s{2,}/).map(s=>s.trim()).filter(s=>s&&!DATE_RX.test(s));return parts.length>1?parts[parts.length-1]:''}return ''};
   const numOf=t=>(t.match(/\d[\d,.]*\s*(?:%|x\b|\+?\s*(?:test cases|tests|defects|bugs|users|customers|clients|services|days|hours|team members|people|million|lakhs?|crores?|k\b))/i)||[])[0];
   const yrs=ctx.years?`${ctx.years}+ years`:'several years';
   const tech=(ctx.matched.length?ctx.matched:j.skills).filter(k=>CAT_OF[k]!=='Soft skills');
@@ -1571,7 +1727,7 @@ function offlineQA(ctx){const j=ctx.jd,comp=j.company||'your company',title=j.ti
   const T={'Testing & QA':[k=>`How would you design and scale a test automation strategy using ${k}?`,k=>`A ${k} suite has become slow and flaky. How do you diagnose and fix it?`,k=>`How do you decide what to cover with ${k} versus other levels of testing?`],'Languages & Frameworks':[k=>`Walk me through a project where you used ${k}. What design decisions did you make and why?`,k=>`What are the most common performance or reliability pitfalls in ${k}, and how have you handled them?`,k=>`How do you structure and test a large ${k} codebase so it stays maintainable?`],'Cloud & DevOps':[k=>`How have you used ${k} to make releases faster or more reliable?`,k=>`A deployment using ${k} fails in production. Walk me through your response.`],'Data & AI':[k=>`How would you use ${k} to solve a real business problem end to end?`,k=>`How do you make sure the results you produce with ${k} are accurate and trusted?`,k=>`Tell me about an insight you found with ${k} that changed a decision.`],'Methods & Process':[k=>`How do you apply ${k} in your day-to-day work? Give a concrete example.`,k=>`What would you change about how your last team practised ${k}?`],'Business & Tools':[k=>`Describe how you've used ${k} and the impact it had.`,k=>`How would you get a new team productive with ${k}?`],'Domain & Functions':[k=>`What does strong ${k} look like to you, and how have you delivered it?`,k=>`Tell me about your biggest win in ${k} and how you measured it.`]};const used={};
   const Q=[];const lastCo=bullets[0]?coOf(bullets[0].b):'';
   Q.push({q:'Tell me about yourself — and why you are a strong fit for this role.',category:'Introduction',difficulty:'Easy',why:'Checks that you can pitch your experience in under two minutes and connect it to this job.',
-    answer:`I'm a ${ctx.role} with ${yrs} of experience${tech.length?' working with '+listJoin(tech.slice(0,3).map(k=>S.jd.form[k]||k)):''}.${bullets[0]?` Most recently${lastCo?' at '+lastCo:''}, ${firstPerson(bullets[0].t)}.`:''}${best&&best!==bullets[0]?` I'm especially proud that ${firstPerson(best.t)}.`:''} What draws me to the ${title} role${j.company?' at '+comp:''} is the chance to apply that experience to ${tech[0]?(S.jd.form[tech[0]]||tech[0])+' at a bigger scale':'a bigger challenge'} while growing with the team.`,
+    answer:`I'm ${/^[aeiou]/i.test(ctx.role)?'an':'a'} ${ctx.role} with ${yrs} of experience${tech.length?' working with '+listJoin(tech.slice(0,3).map(k=>S.jd.form[k]||k)):''}.${bullets[0]?` Most recently${lastCo?' at '+lastCo:''}, ${firstPerson(bullets[0].t)}.`:''}${best&&best!==bullets[0]?` I'm especially proud that ${firstPerson(best.t)}.`:''} ${ctx.noJD?`Next, I'm looking for a role where I can take on bigger ownership${tech[0]?' in '+(S.jd.form[tech[0]]||tech[0]):''} and keep delivering measurable results.`:`What draws me to the ${title} role${j.company?' at '+comp:''} is the chance to apply that experience to ${tech[0]?(S.jd.form[tech[0]]||tech[0])+' at a bigger scale':'a bigger challenge'} while growing with the team.`}`,
     tips:['Present → past → future: current role, 1–2 proof points, why this job.','Keep it to 90 seconds.','End with a hook that invites a follow-up question.'],links:[STAR_LINK]});
   tech.slice(0,4).forEach((k,i)=>{const x=bullets.find(b=>matchTerm(b.t,k));const arr=T[CAT_OF[k]]||[k=>`What is your hands-on experience with ${k}?`];const ci=used[CAT_OF[k]]=(used[CAT_OF[k]]??-1)+1;const f=arr[ci%arr.length];
     Q.push({q:f(S.jd.form[k]||k),category:i<2?'Technical':'Role-specific',difficulty:i===0?'Medium':i===1?'Hard':'Medium',why:`Tests depth in ${S.jd.form[k]||k}, a key requirement in this job description.`,answer:star(x,k),tips:['Lead with your own decisions, not the team\'s.','Mention trade-offs and what you would do differently.','Bring one number.'],links:[linkFor(k)]})});
@@ -1580,16 +1736,38 @@ function offlineQA(ctx){const j=ctx.jd,comp=j.company||'your company',title=j.ti
   Q.push(soft[0]?{q:`Give me an example of how you've demonstrated ${(S.jd.form[soft[0]]||soft[0]).toLowerCase()}.`,category:'Behavioral',difficulty:'Easy',why:`The job explicitly asks for ${S.jd.form[soft[0]]||soft[0]}.`,answer:star(bullets.find(b=>/mentor|led|team|coordinat|stakeholder|present/i.test(b.t)),null),tips:['Pick a story with a clear before/after.','Name the people involved by role.'],links:[STAR_LINK]}
     :{q:'How do you prioritise when several deadlines collide?',category:'Situational',difficulty:'Easy',why:'Checks judgement, communication and time management.',answer:'I list everything with its impact and deadline, confirm priorities with my manager or stakeholders, and communicate early about anything at risk. I protect the highest-impact work, timebox the rest and look for what can be automated or deferred. [Add a real example with the outcome.]',tips:['Show you communicate early.','Give a real example.'],links:[]});
   if(gaps[0])Q.push({q:`This role uses ${S.jd.form[gaps[0]]||gaps[0]}. What's your experience with it?`,category:'Role-specific',difficulty:'Hard',why:`${S.jd.form[gaps[0]]||gaps[0]} is in the job description but not on your resume — they will probe it.`,answer:`I haven't used ${S.jd.form[gaps[0]]||gaps[0]} in production yet, so I won't overstate it. What transfers directly is my experience with ${tech.slice(0,2).map(k=>S.jd.form[k]||k).join(' and ')||'similar tools'}. I've already started [course / side project] and could be productive with it within my first few weeks — [describe what you have built or read so far].`,tips:['Be honest — never bluff a skill.','Show a concrete learning plan.','Bridge from a similar tool you know.'],links:[linkFor(gaps[0])]});
-  Q.push({q:`Why do you want to join ${comp}${j.title?' as '+title:''}?`,category:'Motivation',difficulty:'Easy',why:'Tests genuine interest and whether you researched the company.',answer:`I've been following ${comp} and what stands out is [specific product, value or news — research this]. The ${title} role lines up with what I do best — ${tech.slice(0,2).map(k=>S.jd.form[k]||k).join(' and ')||'my core skills'} — and with where I want to grow next. I'm looking for a team where quality and ownership matter, and that's what I see here.`,tips:['Mention one specific fact about the company.','Connect it to your own goals.'],links:[{title:`Research ${comp}`,url:'https://www.google.com/search?q='+encodeURIComponent(comp+' company news culture')}]});
-  Q.push({q:'Where do you see yourself in the next three years?',category:'Motivation',difficulty:'Easy',why:'Checks ambition, stability and fit with the career path here.',answer:`In three years I'd like to be the go-to person for ${tech[0]?S.jd.form[tech[0]]||tech[0]:'my area'} on the team, mentoring others and owning bigger outcomes — ideally growing within ${comp} as the role expands.`,tips:['Show ambition that fits the role.','Avoid naming a different job.'],links:[]});
+  if(ctx.noJD){
+    Q.push({q:`Walk me through your current role${lastCo?' at '+lastCo:''} — what do you own day to day?`,category:'Role-specific',difficulty:'Easy',why:'Checks that you can explain your scope, stakeholders and impact clearly.',answer:`${lastCo?`At ${lastCo}, `:''}${bullets.slice(0,3).map(x=>firstPerson(x.t)).join('; ')||'[Describe your scope, the people you work with and the outcomes you own.]'}. The common thread is owning outcomes end to end and keeping stakeholders aligned.`,tips:['Cover scope, stakeholders and one result.','Keep it under 90 seconds.'],links:[]});
+    Q.push({q:"What is the achievement you're proudest of?",category:'Behavioral',difficulty:'Medium',why:'Shows what you value and the size of impact you can drive.',answer:star(best,null),tips:['Pick a result with a number.','Explain why it mattered to the business.'],links:[STAR_LINK]});
+    Q.push({q:'Why are you looking for a change, and what kind of role are you targeting next?',category:'Motivation',difficulty:'Easy',why:'Checks your motivation and whether your next step makes sense.',answer:`I've learned a lot as ${/^[aeiou]/i.test(ctx.role)?'an':'a'} ${ctx.role}${tech.length?', especially across '+listJoin(tech.slice(0,2).map(k=>S.jd.form[k]||k)):''}. I'm now looking for a role with bigger ownership and scope, where I can apply that experience and keep growing. [Name the kind of team and problems you want to work on, and why.]`,tips:['Stay positive about your current employer.','Frame the move as growth.'],links:[]});
+  } else Q.push({q:`Why do you want to join ${comp}${j.title?' as '+title:''}?`,category:'Motivation',difficulty:'Easy',why:'Tests genuine interest and whether you researched the company.',answer:`I've been following ${comp} and what stands out is [specific product, value or news — research this]. The ${title} role lines up with what I do best — ${tech.slice(0,2).map(k=>S.jd.form[k]||k).join(' and ')||'my core skills'} — and with where I want to grow next. I'm looking for a team where quality and ownership matter, and that's what I see here.`,tips:['Mention one specific fact about the company.','Connect it to your own goals.'],links:[{title:`Research ${comp}`,url:'https://www.google.com/search?q='+encodeURIComponent(comp+' company news culture')}]});
+  Q.push({q:'Where do you see yourself in the next three years?',category:'Motivation',difficulty:'Easy',why:'Checks ambition, stability and fit with the career path here.',answer:`In three years I'd like to be the go-to person for ${tech[0]?S.jd.form[tech[0]]||tech[0]:'my area'} on the team, mentoring others and owning bigger outcomes — ${ctx.noJD?'ideally in a team where I can keep growing my scope.':`ideally growing within ${comp} as the role expands.`}`,tips:['Show ambition that fits the role.','Avoid naming a different job.'],links:[]});
+  if(ctx.noJD){const f=rx=>Q.find(q=>rx.test(q.q));const walk=f(/^Walk me through your current role/);
+    const list=[Q[0],walk,...Q.filter(q=>['Technical','Role-specific'].includes(q.category)&&q!==walk).slice(0,3),f(/most challenging/),f(/proudest/),f(/disagreed/),f(/looking for a change/),f(/three years/)].filter(Boolean);
+    for(const q of Q)if(list.length<10&&!list.includes(q))list.push(q);return [...new Set(list)].slice(0,10)}
   return Q.slice(0,10)}
+function qaPromptResume(ctx){return `CANDIDATE RESUME:
+"""${ctx.text.slice(0,6000)}"""
+LIKELY TARGET ROLE: ${ctx.role}${ctx.years?` · ${ctx.years}+ years`:''} · KEY SKILLS: ${ctx.jd.skills.slice(0,12).join(', ')||'see resume'}
+
+There is no job description. Create the 10 interview questions this candidate is most likely to face for roles like their current one, based only on what is in the resume — the projects, tools, results and transitions an interviewer would probe. Most important first. Mix: 1 introduction, 4-5 technical / role-specific questions on the resume's main skills and projects, 2-3 behavioural (STAR), 1 about career motivation or their next move.
+For each question give:
+- "q": the question
+- "category": one of Introduction, Technical, Role-specific, Behavioral, Situational, Motivation
+- "difficulty": Easy, Medium or Hard
+- "why": what the interviewer is really checking (1 sentence)
+- "answer": a model answer in first person, 80-150 words, STAR for behavioural, using only facts from the resume
+- "tips": 2-3 short delivery tips
+- "links": 0-2 objects {"title","url"} pointing only to official documentation or highly reputable learning pages for the topic (omit if unsure)
+Return JSON: {"questions":[...]}`}
 function normQA(x){const q={q:String(x.q||x.question||'').trim(),category:x.category||'General',difficulty:x.difficulty||'Medium',why:x.why||x.intent||'',answer:String(x.answer||x.model_answer||'').trim(),tips:Array.isArray(x.tips)?x.tips.map(String):[],links:Array.isArray(x.links)?x.links.filter(l=>l&&/^https:\/\//.test(l.url)).slice(0,2):[]};
   if(!q.links.length){const k=S.jd.skills.find(k=>matchTerm(q.q,k));if(k)q.links=[linkFor(k)]}return q}
-async function genQA(force){readJD();if(!S.jd.text.trim()&&!S.jd.skills.length){toast('Add a job description first.','warn');return}if(!S.jd.skills.length)analyzeJD(true);
+async function genQA(force){const imp=S.mode==='improve';
+  if(imp){if(!S.doc){toast('Upload your resume first.','warn');return}}else{readJD();if(!S.jd.text.trim()&&!S.jd.skills.length){toast('Add a job description first.','warn');return}if(!S.jd.skills.length)analyzeJD(true)}
   const ctx=ctxAny();const off=offlineQA(ctx);let qa=null;const btn=$('#qaBtn');btn.disabled=true;
   const provider=await resolveProvider();
   if(provider!=='offline'&&(provider!=='manual'||force)){$('#qaList').innerHTML='<div class="card empty"><span class="typing"><i></i><i></i><i></i></span>Predicting questions with '+esc(provLabel(provider))+'…</div>';
-    try{const t=await callLLM(SYS_QA,qaPrompt(ctx),{provider,title:'Top 10 interview Q&A',maxTokens:7000});const o=parseJSONLoose(t);const arr=Array.isArray(o)?o:o&&(o.questions||o.items);if(Array.isArray(arr)&&arr.length>=4)qa=arr.map(normQA).filter(q=>q.q&&q.answer)}
+    try{const t=await callLLM(SYS_QA,imp?qaPromptResume(ctx):qaPrompt(ctx),{provider,title:'Top 10 interview Q&A',maxTokens:7000});const o=parseJSONLoose(t);const arr=Array.isArray(o)?o:o&&(o.questions||o.items);if(Array.isArray(arr)&&arr.length>=4)qa=arr.map(normQA).filter(q=>q.q&&q.answer)}
     catch(e){if(e.message!=='cancelled')toast(`${provLabel(provider)}: ${e.message} — showing offline questions.`,'warn',7000)}}
   S.qa=qa?qa.concat(off.filter(o=>!qa.some(q=>q.category===o.category&&o.category==='Introduction'))).slice(0,10):off;S.qaSource=qa?provider:'offline';
   btn.disabled=false;renderQA()}
@@ -1630,14 +1808,17 @@ async function evaluate(q,a){const ctx=ctxAny();const off=evalOffline(q,a,ctx);c
 function addMsg(kind,html,tag){const m=$('#msgs');const e=el('div','msg '+kind,(tag?`<span class="qtag">${esc(tag)}</span>`:'')+html);m.append(e);m.scrollTop=m.scrollHeight;return e}
 function speak(t){if(!S.voice||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);const v=speechSynthesis.getVoices().find(v=>/en[-_](IN|GB|US)/i.test(v.lang)&&/female|zira|samantha|heera|google/i.test(v.name))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang));if(v)u.voice=v;u.rate=1.02;speechSynthesis.speak(u)}
 function ask(q,tag){S.iv.cur=q;S.iv.qStart=Date.now();addMsg('r q',esc(q.q),tag);speak(q.q);$('#answer').focus()}
-async function ivStart(){readJD();if(!S.jd.text.trim()&&!S.jd.skills.length){toast('Add a job description first so the recruiter knows the role.','warn');$('#job').scrollIntoView();return}
-  if(!S.jd.skills.length)analyzeJD(true);if(!S.qa.length){S.qa=offlineQA(ctxAny());S.qaSource='offline';renderQA()}
+async function ivStart(){const imp=S.mode==='improve';
+  if(imp){if(!S.doc){toast('Upload your resume first so the recruiter knows your background.','warn');$('#workspace').scrollIntoView();return}}
+  else{readJD();if(!S.jd.text.trim()&&!S.jd.skills.length){toast('Add a job description first so the recruiter knows the role.','warn');$('#job').scrollIntoView();return}if(!S.jd.skills.length)analyzeJD(true)}
+  const J=imp?{title:profileCtx().role,company:''}:S.jd;
+  if(!S.qa.length){S.qa=offlineQA(ctxAny());S.qaSource='offline';renderQA()}
   const n=+$('#ivCount').value;const qs=S.qa.slice(0,n);while(qs.length<n&&S.qa.length)qs.push(S.qa[qs.length%S.qa.length]);
   S.iv={qs,i:0,turns:[],coach:$('#ivCoach').value,follow:$('#ivFollow').checked,follows:0,start:Date.now(),qStart:Date.now(),provider:await resolveProvider()};
   $('#msgs').innerHTML='';$('#report').classList.add('hide');['answer','sendBtn'].forEach(id=>$('#'+id).disabled=false);$('#micBtn').disabled=!SR;
   $('#ivStart').classList.add('hide');$('#ivSkip').classList.remove('hide');$('#ivEnd').classList.remove('hide');
-  const name=(ctxAny().name||'').split(/\s+/)[0];$('#ivRole').textContent=`Interviewing for ${S.jd.title||'the role'}${S.jd.company?' · '+S.jd.company:''}`;
-  const intro=`Hi ${name?cap(name.toLowerCase()):'there'}! I'm Maya, and I'll be interviewing you today for the ${S.jd.title||'open'} role${S.jd.company?' at '+S.jd.company:''}. I have ${qs.length} questions — answer as you would in the real interview. ${S.iv.coach==='each'?"I'll share quick coaching after each answer.":"I'll hold my feedback until the end, just like a real interview."} Let's begin.`;
+  const name=(ctxAny().name||'').split(/\s+/)[0];$('#ivRole').textContent=`Interviewing for ${J.title||'the role'}${J.company?' · '+J.company:''}`;
+  const intro=`Hi ${name?cap(name.toLowerCase()):'there'}! I'm Maya, and I'll be interviewing you today for ${imp?(/^[aeiou]/i.test(J.title||'')?'an':'a'):'the'} ${J.title||'open'} role${J.company?' at '+J.company:''}. I have ${qs.length} questions — answer as you would in the real interview. ${S.iv.coach==='each'?"I'll share quick coaching after each answer.":"I'll hold my feedback until the end, just like a real interview."} Let's begin.`;
   addMsg('r',esc(intro));speak(intro);clearInterval(S.timer);S.timer=setInterval(()=>{if(!S.iv)return;const s=Math.round((Date.now()-S.iv.qStart)/1000);$('#ivTimer').textContent=`${String(s/60|0).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);
   setTimeout(()=>ask(qs[0],`Question 1 of ${qs.length}`),600);updateLive()}
 function evalCard(ev){const c=ev.overall>=8?'good':ev.overall>=6?'info':ev.overall>=4.5?'warn':'bad';
@@ -1724,6 +1905,7 @@ function renderProviders(){const c=S.cfg;const chromeTxt={available:['good','Rea
     r.textContent='Testing '+provLabel(p)+'…';try{const t=await callLLM('Reply with JSON only.','Return {"ok":true}',{provider:p,maxTokens:300});r.innerHTML=/ok/i.test(t)?`<span class="pill good">${icon('check','width:13px;height:13px')}${esc(provLabel(p))} works</span>`:`<span class="pill warn">Unexpected reply</span>`}catch(e){r.innerHTML=`<span class="pill bad">${esc(e.message.slice(0,120))}</span>`}}}
 async function updateEngine(){const p=await resolveProviderQuiet();const b=$('#engineBtn');b.classList.toggle('live',p!=='offline');
   $('#engineName').textContent=(S.cfg.provider==='auto'?'Auto · ':'')+provLabel(p);
+  if(S.mode==='improve'){$('#genHint').textContent=p==='offline'?'Engine: Offline — runs 15 checks and fixes wording, tense, punctuation and skill names. Connect a free AI for deeper polishing.':p==='manual'?'Engine: your free AI chat — we copy the prompt, you paste the reply back.':`Engine: ${provLabel(p)} — checks, fixes and polishes every line.`;return}
   $('#genHint').textContent=p==='offline'?(S.intensity===3?"Engine: Offline — builds new bullets, summary and skills from the job description. Connect a free AI (Gemini key or your ChatGPT login) for more natural writing.":'Engine: Offline — light rephrasing. Connect a free AI (Gemini key, Chrome AI or your ChatGPT login) for a full rewrite.'):p==='manual'?'Engine: your free AI chat — we copy the prompt, you paste the reply back.':`Engine: ${provLabel(p)} — full rewrite in the job's language.`}
 async function resolveProviderQuiet(){const p=S.cfg.provider;if(p!=='auto')return PROV[p].key&&p!=='custom'&&!S.cfg.keys[p]?'offline':p;for(const k of['gemini','claude','openai','deepseek','custom'])if(S.cfg.keys[k])return k;return S.chrome==='available'?'chrome':'offline'}
 function openDrawer(){renderProviders();$('#drawer').classList.add('on');$('#scrim').classList.add('on')}
@@ -1803,7 +1985,8 @@ function init(){
   $('#redetect').onclick=()=>{S.skillsTouched=false;analyzeJD(true);toast(`${S.jd.skills.length} skills detected.`,'good',2000)};
   $$('#toneSeg button').forEach(b=>b.onclick=()=>{$$('#toneSeg button').forEach(x=>x.classList.toggle('on',x===b));S.tone=b.textContent.replace('&amp;','&')});
   $('#intensity').oninput=e=>{S.intensity=+e.target.value;updateGaps();updateEngine()};
-  $('#generateBtn').onclick=generate;
+  $('#generateBtn').onclick=generate;S.mode='tailor';
+  $$('#modeTabs button').forEach(b=>b.onclick=()=>{if(S.mode!==b.dataset.mode)setMode(b.dataset.mode)});
   $$('#pvTabs button').forEach(b=>b.onclick=()=>showView(b.dataset.pv));
   $('#hlToggle').onchange=e=>$('#pv').classList.toggle('hl',e.target.checked);
   $('#pvZoom').onclick=e=>{S.pvFull=!S.pvFull;e.currentTarget.textContent=S.pvFull?'Fit to screen':'Actual size';e.currentTarget.setAttribute('aria-pressed',S.pvFull);$$('.pvbox').forEach(fitZoom)};
